@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>File Upload</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" integrity="sha512-Fo3rlrZj/k6S1Ykr6RZT+GBzTmxAY6ftgg/Jt6SHJEnkRBOxY6x8abacnP2xzdR9oDqBf7JQaxFEKTqeXKMyQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f4f7fa;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            max-width: 400px;
+            width: 100%;
+        }
+
+        h1 {
+            font-size: 1.8rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        label {
+            font-size: 1rem;
+            font-weight: 500;
+            color: #555;
+            margin-bottom: 10px;
+        }
+
+        .file-input {
+            border: 2px dashed #ced6e0;
+            padding: 20px;
+            width: 100%;
+            border-radius: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: border-color 0.3s;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .file-input:hover {
+            border-color: #70a1ff;
+        }
+
+        .file-input input {
+            position: absolute;
+            opacity: 0;
+            width: 100%;
+            height: 100%;
+            cursor: pointer;
+        }
+
+        .file-input .icon {
+            font-size: 2.5rem;
+            color: #70a1ff;
+            margin-right: 10px;
+        }
+
+        .file-input-text {
+            font-size: 1rem;
+            color: #555;
+            word-wrap: break-word;
+        }
+
+        button {
+            margin-top: 20px;
+            background-color: #70a1ff;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 5px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #1e90ff;
+        }
+
+        .spinner {
+            display: none;
+            margin-top: 20px;
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #3498db;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @media (max-width: 500px) {
+            .container {
+                padding: 20px;
+            }
+
+            h1 {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Upload File for Sentiment Analysis</h1>
+
+        <form action="/upload/" method="POST" enctype="multipart/form-data" onsubmit="showSpinner()">
+            {% csrf_token %}
+            <label for="file">Choose file (CSV or XLSX):</label>
+            <div class="file-input">
+                <i class="fas fa-file-upload icon"></i>
+                <span class="file-input-text" id="file-name">Drag & Drop your file here or click to upload</span>
+                <input type="file" id="file" name="file" accept=".csv,.xlsx" required>
+            </div>
+            <button type="submit">
+                <i class="fas fa-paper-plane"></i> Submit
+            </button>
+        </form>
+
+        <div class="spinner" id="loading-spinner"></div>
+    </div>
+
+    <script>
+        // JavaScript to update the file name after selecting a file
+        const fileInput = document.getElementById('file');
+        const fileNameDisplay = document.getElementById('file-name');
+        const spinner = document.getElementById('loading-spinner');
+
+        fileInput.addEventListener('change', function () {
+            if (fileInput.files.length > 0) {
+                fileNameDisplay.textContent = fileInput.files[0].name;
+            } else {
+                fileNameDisplay.textContent = 'Drag & Drop your file here or click to upload';
+            }
+        });
+
+        // Show spinner on form submission
+        function showSpinner() {
+            spinner.style.display = 'block';
+        }
+    </script>
+
+</body>
+</html>
